@@ -5,6 +5,7 @@ let svg = document.getElementById("svg");
 const nodeGenerator = (type, props = {}) => {
   let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
   for (prop in props) newElem.setAttribute(prop, props[prop]);
+  dragSVG(newElem);
   svg.append(newElem);
   return newElem;
 };
@@ -26,7 +27,9 @@ const nodesGen = nodesList => {
       cy: x[0],
       cx: x[1],
       r: x[2],
-      fill: "steelblue"
+      fill: "steelblue",
+      "stroke-width": 3,
+      stroke: "white"
     });
   });
 };
