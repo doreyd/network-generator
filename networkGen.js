@@ -7,14 +7,16 @@ const nodeGenerator = (type, props = {}, x) => {
   for (prop in props) newElem.setAttribute(prop, props[prop]);
   newElem.setAttribute("id", `node${x[0]}`);
   svg.append(newElem);
-  //   console.log(x[4], x[5]);
-  //   dragSVG(newElem);
   dragSVGgroup([newElem.getAttribute("id")], x[4], x[5]);
   return newElem;
 };
 
 // Function generating random numbers between 0 and the picked base
 const ran = base => Math.round(20 + Math.random() * base);
+
+// ****************************************************************
+// ****** This section allows for random generation of node********
+// ****************************************************************
 
 // Function to generate a random nosed list
 const nodeslistGen = qty => {
@@ -42,7 +44,33 @@ const nodesGen = nodesList => {
   });
 };
 
-let nodeList = nodeslistGen(30);
+// let nodeList = nodeslistGen(30);
+
+// ****************************************************************
+// ****************************************************************
+// ****************************************************************
+
+// node and links lists
+let nodeList = [
+  [200, 300, 20],
+  [200, 300, 20],
+  [200, 300, 20],
+  [200, 300, 20],
+  [200, 300, 20]
+];
+
+let links = [
+  { start: 1, end: 3 },
+  { start: 1, end: 2 },
+  { start: 4, end: 1 },
+  { start: 0, end: 3 }
+];
+
+// Formatting the node list
+nodeList = nodeList.map((x, i) => [i, ...x, [], []]);
+
+// Formatting the links
+links.forEach((x, i) => (x["id"] = i));
 
 const createLink = id => {
   let newLink = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -57,12 +85,6 @@ const createLink = id => {
   svg.append(newLink);
   return newLink;
 };
-let links = [
-  { id: 0, start: 5, end: 3 },
-  { id: 1, start: 12, end: 10 },
-  { id: 2, start: 2, end: 22 },
-  { id: 3, start: 10, end: 15 }
-];
 
 const linkingNodes = () => {
   links.forEach((x, i) => {
@@ -80,6 +102,5 @@ const attachNodeLinks = () => {
 };
 
 attachNodeLinks();
-// console.log(nodeList);
 linkingNodes();
 nodesGen(nodeList);
