@@ -1,11 +1,17 @@
-const dragSVGgroup = elemGroupId => {
+const dragSVGgroup = (elemGroupId, linkStart = [], linkEnd = []) => {
+  // console.log(linkStart, linkEnd);
+  let stElem = linkStart.map(x => document.getElementById(x));
+  let enElem = linkEnd.map(x => document.getElementById(x));
   let elemGroup = elemGroupId.map(x => document.getElementById(x));
-  elemGroup.forEach(x => dragSVG(x, elemGroup));
+  elemGroup.forEach(x => dragSVG(x, elemGroup, stElem, enElem));
 };
 
 // This is a module for drag and drop SVG elements
-const dragSVG = (elem, elemGroup) => {
+const dragSVG = (elem, elemGroup, stElem, enElem) => {
   let delta = [];
+  let deltaSt = [];
+  let deltaEn = [];
+
   let elemDragged;
 
   const coord = (e, elem) => {
@@ -13,6 +19,7 @@ const dragSVG = (elem, elemGroup) => {
     let cursY = e.pageY;
     let elemX = elem.x ? elem.x.animVal.value : elem.cx.animVal.value;
     let elemY = elem.y ? elem.y.animVal.value : elem.cy.animVal.value;
+
     return [cursX, cursY, elemX, elemY];
   };
 
@@ -25,6 +32,14 @@ const dragSVG = (elem, elemGroup) => {
       elem.setAttribute("x", d2[0] - delta[i][0]);
       elem.setAttribute("y", d2[1] - delta[i][1]);
     }
+    deltaSt.forEach(arr => {
+      arr[0].setAttribute("x1", d2[0] - arr[1]);
+      arr[0].setAttribute("y1", d2[1] - arr[2]);
+    });
+    deltaEn.forEach(arr => {
+      arr[0].setAttribute("x2", d2[0] - arr[1]);
+      arr[0].setAttribute("y2", d2[1] - arr[2]);
+    });
   };
 
   const newPos = e => {
@@ -36,6 +51,17 @@ const dragSVG = (elem, elemGroup) => {
   const setDelta = (e, elem) => {
     let d = coord(e, elem);
     delta.push([d[0] - d[2], d[1] - d[3]]);
+    deltaSt = stElem.map(elem => [
+      elem,
+      d[0] - elem.x1.animVal.value,
+      d[1] - elem.y1.animVal.value
+    ]);
+
+    deltaEn = enElem.map(elem => [
+      elem,
+      d[0] - elem.x2.animVal.value,
+      d[1] - elem.y2.animVal.value
+    ]);
   };
 
   elem.onmousedown = e => {
@@ -48,6 +74,8 @@ const dragSVG = (elem, elemGroup) => {
 
   elem.onmouseup = e => {
     delta = [];
+    deltaSt = [];
+    deltaEn = [];
     elemDragged = "";
     svg.onmousemove = e => {};
   };
