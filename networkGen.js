@@ -7,7 +7,7 @@ const nodeGenerator = (type, props = {}, x) => {
   for (prop in props) newElem.setAttribute(prop, props[prop]);
   newElem.setAttribute("id", `node${x[0]}`);
   svg.append(newElem);
-  dragSVGgroup([newElem.getAttribute("id"), "aaa"], x[4], x[5]);
+  dragSVGgroup([newElem.getAttribute("id")], x[4], x[5]);
   return newElem;
 };
 
@@ -32,33 +32,49 @@ const nodeslistGen = qty => {
 // ****************************************************************
 // ****************************************************************
 
-// node and links lists
-let nodeList = [
-  [200, 300, 20],
-  [100, 500, 30],
-  [400, 200, 40],
-  [500, 300, 20],
-  [350, 400, 60]
-];
+let links = [];
+// Converting regular coordinates into polar coordinates
+// based on a given center
 
-let links = [
-  [0, 3],
-  [1, 2],
-  [4, 3],
-  [1, 3],
-  [1, 4],
-  [2, 3],
-  [2, 0],
-  [0, 1],
-  [0, 4]
-];
+let center = [400, 500, 140, 24];
+// let qty = 4;
+let nodeRaw = [];
+
+const sinCos = a => [Math.sin(a), Math.cos(a)];
+
+const netShape = (cx, cy, r, sin, cos, i, shape) => {
+  let x, y;
+  if (shape === "circle") {
+    x = parseInt(cx + r * cos);
+    y = parseInt(cy + r * sin);
+  } else if (shape === "star") {
+    x = parseInt(cx + r * cos * (1 + (i % 2)));
+    y = parseInt(cy + r * sin * (1 + (i % 2)));
+  }
+  return [x, y];
+};
+
+const graphGen = (cx, cy, r, qty) => {
+  for (let i = 0; i < qty; i++) {
+    let alpha = (i * (Math.PI * 2)) / qty;
+    let [sin, cos] = sinCos(alpha);
+    let [x, y] = netShape(cx, cy, r, sin, cos, i, "star");
+    nodeRaw.push([x, y, 30]);
+    // console.log([qty + 1, i]);
+    links.push([qty, i]);
+  }
+  nodeRaw.push([cx, cy, 30]);
+  // console.log(links);
+};
+
+graphGen(...center);
 
 // Formatting the node list
-nodeList = nodeList.map((x, i) => [i, ...x, [], []]);
+nodeList = nodeRaw.map((x, i) => [i, x[0], x[1], x[2], [], []]);
 
 // Formatting the links
 links = links.map((x, i) => ({ id: i, start: x[0], end: x[1] }));
-
+console.log(links);
 // Common node style
 let nodeStyle = { fill: "steelblue", "stroke-width": 3, stroke: "white" };
 
