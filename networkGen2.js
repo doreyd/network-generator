@@ -7,7 +7,24 @@ const nodeGenerator = (type, props = {}, x) => {
   for (prop in props) newElem.setAttribute(prop, props[prop]);
   newElem.setAttribute("id", `node${x[0]}`);
   svg.append(newElem);
-  dragSVGgroup([newElem.getAttribute("id")], x[4], x[5]);
+
+  let newElem2 = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "circle"
+  );
+  for (prop in nodeStyle) newElem2.setAttribute(prop, nodeStyle[prop]);
+  newElem2.setAttribute("id", `node2${x[0]}`);
+
+  let cx2 = parseInt(newElem.getAttribute("cx")) + 20;
+  let cy2 = parseInt(newElem.getAttribute("cy")) - 20;
+
+  console.log(cx2, cy2);
+  newElem2.setAttribute("cx", cx2);
+  newElem2.setAttribute("cy", cy2);
+  newElem2.setAttribute("r", 15);
+  svg.append(newElem2);
+
+  dragSVGgroup([`node${x[0]}`, `node2${x[0]}`], x[4], x[5]);
   return newElem;
 };
 
@@ -36,7 +53,7 @@ let links = [];
 // Converting regular coordinates into polar coordinates
 // based on a given center
 
-let center = [400, 500, 140, 10];
+let center = [400, 500, 140, 6];
 // let qty = 4;
 let nodeRaw = [];
 
@@ -70,7 +87,7 @@ const graphGen = (cx, cy, r, qty) => {
 graphGen(...center);
 
 // Formatting the node list
-nodeList = nodeRaw.map((x, i) => [i, x[0], x[1], x[2], [], []]);
+nodeList = nodeRaw.map((x, i) => [i, [x[0], x[1], x[2]], 555, 555, [], []]);
 
 // Formatting the links
 links = links.map((x, i) => ({ id: i, start: x[0], end: x[1] }));
@@ -84,9 +101,9 @@ const nodesGen = nodesList => {
     nodeGenerator(
       "circle",
       {
-        cy: x[1],
-        cx: x[2],
-        r: x[3],
+        cy: x[1][0],
+        cx: x[1][1],
+        r: x[1][2],
         ...nodeStyle
       },
       x
@@ -98,12 +115,12 @@ const createLink = id => {
   let newLink = document.createElementNS("http://www.w3.org/2000/svg", "line");
   //   for (prop in linkProps) newLink.setAttribute(prop, linkProps[prop]);
   newLink.setAttribute("id", id);
-  newLink.setAttribute("style", "stroke:steelblue;stroke-width:1px;");
+  newLink.setAttribute("style", "stroke:white;stroke-width:2px;");
   // newLink.setAttribute("style", "stroke:white;stroke-width:3px;");
-  newLink.setAttribute("x1", nodeList[links[id]["start"]][2]);
-  newLink.setAttribute("y1", nodeList[links[id]["start"]][1]);
-  newLink.setAttribute("x2", nodeList[links[id]["end"]][2]);
-  newLink.setAttribute("y2", nodeList[links[id]["end"]][1]);
+  newLink.setAttribute("x1", nodeList[links[id]["start"]][1][1]);
+  newLink.setAttribute("y1", nodeList[links[id]["start"]][1][0]);
+  newLink.setAttribute("x2", nodeList[links[id]["end"]][1][1]);
+  newLink.setAttribute("y2", nodeList[links[id]["end"]][1][0]);
   svg.append(newLink);
   return newLink;
 };
