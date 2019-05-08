@@ -3,6 +3,22 @@ let svg = document.getElementById("svg");
 
 // Function to create and set up SVG elements
 const nodeGenerator = (type, props = {}, x) => {
+  let newElem0 = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "circle"
+  );
+  newElem0.setAttribute("id", `node0${x[0]}`);
+
+  let cx2 = parseInt(props.cx) + 20;
+  let cy2 = parseInt(props.cy) - 20;
+  newElem0.setAttribute("stroke-width", 4);
+  newElem0.setAttribute("stroke", "white");
+
+  newElem0.setAttribute("cx", cx2);
+  newElem0.setAttribute("cy", cy2);
+  newElem0.setAttribute("r", 15);
+  svg.append(newElem0);
+
   let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
   for (prop in props) newElem.setAttribute(prop, props[prop]);
   newElem.setAttribute("id", `node${x[0]}`);
@@ -12,19 +28,16 @@ const nodeGenerator = (type, props = {}, x) => {
     "http://www.w3.org/2000/svg",
     "circle"
   );
-  for (prop in nodeStyle) newElem2.setAttribute(prop, nodeStyle[prop]);
+
   newElem2.setAttribute("id", `node2${x[0]}`);
+  newElem2.setAttribute("fill", "steelblue");
 
-  let cx2 = parseInt(newElem.getAttribute("cx")) + 20;
-  let cy2 = parseInt(newElem.getAttribute("cy")) - 20;
-
-  console.log(cx2, cy2);
   newElem2.setAttribute("cx", cx2);
   newElem2.setAttribute("cy", cy2);
-  newElem2.setAttribute("r", 15);
+  newElem2.setAttribute("r", 14);
   svg.append(newElem2);
 
-  dragSVGgroup([`node${x[0]}`, `node2${x[0]}`], x[4], x[5]);
+  dragSVGgroup([`node0${x[0]}`, `node${x[0]}`, `node2${x[0]}`], x[4], x[5]);
   return newElem;
 };
 
