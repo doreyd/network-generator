@@ -2,7 +2,7 @@
 let svg = document.getElementById("svg");
 
 // Function to create and set up SVG elements
-const nodeGenerator = (type, props = {}, x) => {
+const nodeGenerator = (type, props = {}, x, i) => {
   let newElem0 = document.createElementNS(
     "http://www.w3.org/2000/svg",
     "circle"
@@ -19,25 +19,52 @@ const nodeGenerator = (type, props = {}, x) => {
   newElem0.setAttribute("r", 15);
   svg.append(newElem0);
 
-  let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
+  //   let clipPath = document.createElementNS(
+  //     "http://www.w3.org/2000/svg",
+  //     "clipPath"
+  //   );
+  //   clipPath.setAttribute("id", `cc${x[0]}`);
+  //   svg.innerHTML += `<image id="img${i}" xlink:href="john.jpg" clip-path="url(#circle${i})" />`;
+  //   let img = document.getElementById(`img${i}`);
+  //   let img = document.createElementNS("http://www.w3.org/2000/svg", "image");
+
+  //   img.setAttribute("id", `img${x[0]}`);
+  //   img.setAttribute("xlink:href", `john.jpg`);
+  //   img.setAttribute("clip-path", `url(#cc${x[0]}`);
+  svg.innerHTML += `<clipPath id="cc${x[0]}">
+    <circle id="node${x[0]}" ></circle>
+    </clipPath>
+    <image id="img${x[0]}" xlink:href="john.jpg" clip-path="url(#cc${
+    x[0]
+  })" />`;
+  console.log(svg.innerHTML);
+  //   let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
+  let newElem = document.getElementById(`node${x[0]}`);
   for (prop in props) newElem.setAttribute(prop, props[prop]);
-  newElem.setAttribute("id", `node${x[0]}`);
-  svg.append(newElem);
+  //   newElem.setAttribute("id", `node${x[0]}`);
+  //   clipPath.append(newElem);
+  //   svg.append(clipPath);
 
-  let newElem2 = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "circle"
-  );
+  //   svg.innerHTML += `
+  //   <image id="img${x[0]}" xlink:href="john.jpg" clip-path="url(#cc${x[0]})" />`;
+  //   svg.append(img);
+  //   svg.append(newElem);
 
-  newElem2.setAttribute("id", `node2${x[0]}`);
-  newElem2.setAttribute("fill", "steelblue");
+  //***** */
+  //   let newElem2 = document.createElementNS(
+  //     "http://www.w3.org/2000/svg",
+  //     "circle"
+  //   );
 
-  newElem2.setAttribute("cx", cx2);
-  newElem2.setAttribute("cy", cy2);
-  newElem2.setAttribute("r", 14);
-  svg.append(newElem2);
+  //   newElem2.setAttribute("id", `node2${x[0]}`);
+  //   newElem2.setAttribute("fill", "steelblue");
 
-  dragSVGgroup([`node0${x[0]}`, `node${x[0]}`, `node2${x[0]}`], x[4], x[5]);
+  //   newElem2.setAttribute("cx", cx2);
+  //   newElem2.setAttribute("cy", cy2);
+  //   newElem2.setAttribute("r", 14);
+  //   svg.append(newElem2);
+
+  dragSVGgroup([`node0${x[0]}`, `node${x[0]}`], x[4], x[5]);
   return newElem;
 };
 
@@ -110,7 +137,7 @@ let nodeStyle = { fill: "steelblue", "stroke-width": 3, stroke: "white" };
 
 // Function to generate the SVG nodes
 const nodesGen = nodesList => {
-  nodesList.forEach(x => {
+  nodesList.forEach((x, i) => {
     nodeGenerator(
       "circle",
       {
@@ -119,7 +146,8 @@ const nodesGen = nodesList => {
         r: x[1][2],
         ...nodeStyle
       },
-      x
+      x,
+      i
     );
   });
 };

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <svg id="svg">
+      <!-- <clipPath id="aa">
+        <circle cx="70" cy="70" r="50"></circle>
+      </clipPath> -->
+    </svg>
+    <script src="svgImg.js"></script>
+    <script>
+      let svg = document.getElementById("svg");
+
+      let clipPath = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "clipPath"
+      );
+      clipPath.setAttribute("id", "aa");
+
+      let circle = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "circle"
+      );
+      circle.setAttribute("cx", "70");
+      circle.setAttribute("cy", "70");
+      circle.setAttribute("r", "50");
+
+      clipPath.append(circle);
+      svg.append(clipPath);
+
+      svg.innerHTML += svgImg("aa");
+    </script>
+  </body>
+</html>
