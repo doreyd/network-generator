@@ -1,4 +1,4 @@
-let svgImg = id => `<g style="clip-path:url(#${id}); ">
+let svgImg = id => `<g style="clip-path:url(#${id});" id="ww">
         <g>
           <path
             style="fill:#F1C9A5;"

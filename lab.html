@@ -13,6 +13,7 @@
       </clipPath> -->
     </svg>
     <script src="svgImg.js"></script>
+    <script src="mark.js"></script>
     <script>
       let svg = document.getElementById("svg");
 
@@ -26,14 +27,17 @@
         "http://www.w3.org/2000/svg",
         "circle"
       );
-      circle.setAttribute("cx", "70");
-      circle.setAttribute("cy", "70");
-      circle.setAttribute("r", "50");
+      circle.setAttribute("cx", "170");
+      circle.setAttribute("cy", "170");
+      circle.setAttribute("r", "500");
 
       clipPath.append(circle);
       svg.append(clipPath);
-
       svg.innerHTML += svgImg("aa");
+      // svg.innerHTML += svgImage;
+      let img = document.getElementById("ww");
+      img.setAttribute("x", "120");
+      img.setAttribute("y", "120");
     </script>
   </body>
 </html>
