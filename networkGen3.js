@@ -1,31 +1,19 @@
 // Dom selection
 let svg = document.getElementById("svg");
 
+const setSVGelem = (type, style = {}, appendTo) => {
+  let elem = document.createElementNS("http://www.w3.org/2000/svg", type);
+  for (let prop in style) elem.setAttribute(prop, style[prop]);
+  appendTo.append(elem);
+  return elem;
+};
+
 // Function to create and set up SVG elements
 const nodeGenerator = (type, props = {}, outer, imgProps, x) => {
-  let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
-  for (let prop in props) newElem.setAttribute(prop, props[prop]);
-  newElem.setAttribute("id", `node${x[0]}`);
-
-  let clipPath = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "clipPath"
-  );
-  clipPath.setAttribute("id", `clipPath${x[0]}`);
-
-  svg.append(clipPath);
-  clipPath.append(newElem);
-
-  let outerCircle = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "circle"
-  );
-  for (let prop2 in outer) outerCircle.setAttribute(prop2, outer[prop2]);
-  svg.append(outerCircle);
-
-  let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-  for (let prop2 in imgProps) image.setAttribute(prop2, imgProps[prop2]);
-  svg.append(image);
+  let clipPath = setSVGelem("clipPath", { id: `clipPath${x[0]}` }, svg);
+  let newElem = setSVGelem("circle", { id: `node${x[0]}`, ...props }, clipPath);
+  let outerCircle = setSVGelem("circle", outer, svg);
+  let image = setSVGelem("image", imgProps, svg);
 
   dragSVGgroup([`node${x[0]}`, `img${x[0]}`, `outer${x[0]}`], x[4], x[5]);
   return newElem;
