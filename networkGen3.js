@@ -4,11 +4,35 @@ let svg = document.getElementById("svg");
 // Function to create and set up SVG elements
 const nodeGenerator = (type, props = {}, x) => {
   let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
-
   for (prop in props) newElem.setAttribute(prop, props[prop]);
   newElem.setAttribute("id", `node${x[0]}`);
-  svg.append(newElem);
-  dragSVGgroup([newElem.getAttribute("id")], x[4], x[5]);
+  // svg.append(newElem);
+
+  //************************* */
+  // let svg = document.getElementById("svg");
+  let clipPath = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "clipPath"
+  );
+  clipPath.setAttribute("id", `clipPath${x[0]}`);
+
+  svg.append(clipPath);
+  clipPath.append(newElem);
+  console.log(parseInt(props["cx"]) - parseInt(props["r"]));
+  let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  image.setAttribute("id", `img${x[0]}`);
+  image.setAttribute("x", parseInt(props["cx"]) - parseInt(props["r"]));
+  image.setAttribute("y", parseInt(props["cy"]) - parseInt(props["r"]));
+  image.setAttribute("height", parseInt(props["r"]) * 2);
+  image.setAttribute("width", parseInt(props["r"]) * 2);
+  image.setAttribute("href", "john.jpg");
+  image.setAttribute("clip-path", `url(#clipPath${x[0]})`);
+
+  svg.append(image);
+
+  //******************************** */
+
+  dragSVGgroup([`node${x[0]}`, `img${x[0]}`], x[4], x[5]);
   return newElem;
 };
 
@@ -99,7 +123,7 @@ const createLink = id => {
   let newLink = document.createElementNS("http://www.w3.org/2000/svg", "line");
   //   for (prop in linkProps) newLink.setAttribute(prop, linkProps[prop]);
   newLink.setAttribute("id", id);
-  newLink.setAttribute("style", "stroke:white;stroke-width:2px;");
+  newLink.setAttribute("style", "stroke:steelblue;stroke-width:1px;");
   // newLink.setAttribute("style", "stroke:white;stroke-width:3px;");
   newLink.setAttribute("x1", nodeList[links[id]["start"]][2]);
   newLink.setAttribute("y1", nodeList[links[id]["start"]][1]);
