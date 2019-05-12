@@ -2,14 +2,11 @@
 let svg = document.getElementById("svg");
 
 // Function to create and set up SVG elements
-const nodeGenerator = (type, props = {}, x) => {
+const nodeGenerator = (type, props = {}, outer, imgProps, x) => {
   let newElem = document.createElementNS("http://www.w3.org/2000/svg", type);
-  for (prop in props) newElem.setAttribute(prop, props[prop]);
+  for (let prop in props) newElem.setAttribute(prop, props[prop]);
   newElem.setAttribute("id", `node${x[0]}`);
-  // svg.append(newElem);
 
-  //************************* */
-  // let svg = document.getElementById("svg");
   let clipPath = document.createElementNS(
     "http://www.w3.org/2000/svg",
     "clipPath"
@@ -18,21 +15,19 @@ const nodeGenerator = (type, props = {}, x) => {
 
   svg.append(clipPath);
   clipPath.append(newElem);
-  console.log(parseInt(props["cx"]) - parseInt(props["r"]));
-  let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-  image.setAttribute("id", `img${x[0]}`);
-  image.setAttribute("x", parseInt(props["cx"]) - parseInt(props["r"]));
-  image.setAttribute("y", parseInt(props["cy"]) - parseInt(props["r"]));
-  image.setAttribute("height", parseInt(props["r"]) * 2);
-  image.setAttribute("width", parseInt(props["r"]) * 2);
-  image.setAttribute("href", "john.jpg");
-  image.setAttribute("clip-path", `url(#clipPath${x[0]})`);
 
+  let outerCircle = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "circle"
+  );
+  for (let prop2 in outer) outerCircle.setAttribute(prop2, outer[prop2]);
+  svg.append(outerCircle);
+
+  let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  for (let prop2 in imgProps) image.setAttribute(prop2, imgProps[prop2]);
   svg.append(image);
 
-  //******************************** */
-
-  dragSVGgroup([`node${x[0]}`, `img${x[0]}`], x[4], x[5]);
+  dragSVGgroup([`node${x[0]}`, `img${x[0]}`, `outer${x[0]}`], x[4], x[5]);
   return newElem;
 };
 
@@ -99,9 +94,8 @@ nodeList = nodeRaw.map((x, i) => [i, x[0], x[1], x[2], [], []]);
 
 // Formatting the links
 links = links.map((x, i) => ({ id: i, start: x[0], end: x[1] }));
-console.log(links);
 // Common node style
-let nodeStyle = { fill: "steelblue", "stroke-width": 3, stroke: "white" };
+let nodeStyle = { fill: "white", "stroke-width": 3, stroke: "steelblue" };
 
 // Function to generate the SVG nodes
 const nodesGen = nodesList => {
@@ -111,8 +105,23 @@ const nodesGen = nodesList => {
       {
         cy: x[1],
         cx: x[2],
-        r: x[3],
+        r: x[3]
+      },
+      {
+        cy: x[1],
+        cx: x[2],
+        r: x[3] + 4,
+        id: `outer${x[0]}`,
         ...nodeStyle
+      },
+      {
+        y: x[1] - x[3],
+        x: x[2] - x[3],
+        height: x[3] * 2,
+        width: x[3] * 2,
+        id: `img${x[0]}`,
+        href: "john.jpg",
+        "clip-path": `url(#clipPath${x[0]})`
       },
       x
     );
