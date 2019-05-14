@@ -10,7 +10,7 @@
   };
 
   // Function to create and set up SVG elements
-  const nodeGenerator = (props = {}, outer, imgProps, x) => {
+  const nodeGenerator = (props = {}, outer, imgProps, newMsg, newMsg2, x) => {
     let clipPath = setSVGelem("clipPath", { id: `clipPath${x[0]}` }, svg);
     let newElem = setSVGelem(
       "circle",
@@ -18,9 +18,22 @@
       clipPath
     );
     setSVGelem("circle", outer, svg);
+    setSVGelem("circle", newMsg, svg);
+    let text2 = setSVGelem("text", newMsg2, svg);
+    text2.textContent = center[3].msgNew[x[0]];
     setSVGelem("image", imgProps, svg);
 
-    dragSVGgroup([`node${x[0]}`, `img${x[0]}`, `outer${x[0]}`], x[5], x[6]);
+    dragSVGgroup(
+      [
+        `node${x[0]}`,
+        `img${x[0]}`,
+        `outer${x[0]}`,
+        `text${x[0]}`,
+        `text2${x[0]}`
+      ],
+      x[5],
+      x[6]
+    );
     return newElem;
   };
 
@@ -70,13 +83,13 @@
 
   let r0 = 30;
 
-  const graphGen = (cx, cy, r, data) => {
-    let qty = data.length;
+  const graphGen = (cx, cy, r, msgs) => {
+    let qty = msgs.nodes.length;
     for (let i = 0; i < qty; i++) {
       let alpha = (i * (Math.PI * 2)) / qty;
       let [sin, cos] = sinCos(alpha);
       let [x, y] = netShape(cx, cy, r, sin, cos, i, graphType);
-      nodeRaw.push([x, y, r0, data[i]]);
+      nodeRaw.push([x, y, r0, msgs.nodes[i]]);
       links.push([qty, i]);
     }
     nodeRaw.push([cx, cy, r0, "myself"]);
@@ -126,6 +139,18 @@
           onclick: `console.log("img${x[0]}")`,
           "clip-path": `url(#clipPath${x[0]})`
         },
+        {
+          cy: x[1] - x[3],
+          cx: x[2] + x[3],
+          r: 10,
+          id: `text${x[0]}`,
+          fill: "white"
+        },
+        {
+          y: x[1] - x[3] + 4,
+          x: x[2] + x[3] - 4,
+          id: `text2${x[0]}`
+        },
         x
       );
     });
@@ -168,4 +193,6 @@
   nodesGen(nodeList);
 
   // graphGen(...center);
-})([300, 300, 140, ["john", "kayla", "dawn"]], "star");
+})([300, 300, 140, msgData], "star");
+
+// console.log(svg);

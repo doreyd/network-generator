@@ -8,6 +8,15 @@ let messages = {
     ["sender", "howdddddddddddddddddddddddddddddddddddddddd", false, 123456235],
     ["sender", "You wanna grab a coffee sometime next week ", false, 123456235]
   ],
+  john: [
+    ["receiver", "this is a response to the test", true, 123456235],
+    ["sender", "this is a test", true, 123456235],
+    ["sender", "this", true, 123456235],
+    ["receiver", "hi", true, 123456235],
+    ["receiver", "how are you", true, 123456235],
+    ["sender", "howdddddddddddddddddddddddddddddddddddddddd", true, 123456235],
+    ["sender", "You wanna grab a coffee sometime next week ", true, 123456235]
+  ],
   dawn: [
     ["sender", "how was the book i gave you", true, 123456235],
     ["receiver", "how was the book i gave you", false, 123456235],
@@ -38,16 +47,13 @@ const stateChange = (messages, type, state) => {
   return messages.map(x => (x = x[0] === type ? [x[0], x[1], state] : x));
 };
 // console.log(msgType(messages["dawn"], "receiver"));
+let keyList = Object.keys(messages);
 
 let msgData = {
-  nodes: Object.keys(messages),
-  msgType: Object.keys(messages).map(x => msgType(messages[x])),
-  msgNew: Object.keys(messages).map(x =>
-    stateCount(messages[x], "sender", false)
-  ),
-  msgUnread: Object.keys(messages).map(x =>
-    stateCount(messages[x], "receiver", false)
-  )
+  nodes: keyList,
+  msgType: keyList.map(x => msgType(messages[x])),
+  msgNew: keyList.map(x => stateCount(messages[x], "sender", false)),
+  msgUnread: keyList.map(x => stateCount(messages[x], "receiver", false))
 };
 console.log(JSON.stringify(msgData));
 
