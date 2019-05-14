@@ -17,8 +17,9 @@ const dragSVG = (elem, elemGroup, stElem, enElem) => {
   const coord = (e, elem) => {
     let cursX = e.pageX;
     let cursY = e.pageY;
-    let elemX = elem.x ? elem.x.animVal.value : elem.cx.animVal.value;
-    let elemY = elem.y ? elem.y.animVal.value : elem.cy.animVal.value;
+
+    let elemX = elem.x ? elem.getAttribute("x") : elem.getAttribute("cx");
+    let elemY = elem.y ? elem.getAttribute("y") : elem.getAttribute("cy");
 
     return [cursX, cursY, elemX, elemY];
   };
@@ -29,7 +30,6 @@ const dragSVG = (elem, elemGroup, stElem, enElem) => {
       elem.setAttribute("cx", d2[0] - delta[i][0]);
       elem.setAttribute("cy", d2[1] - delta[i][1]);
     } else if (elem.x) {
-      console.log(delta);
       elem.setAttribute("x", d2[0] - delta[i][0]);
       elem.setAttribute("y", d2[1] - delta[i][1]);
     }
@@ -51,6 +51,7 @@ const dragSVG = (elem, elemGroup, stElem, enElem) => {
 
   const setDelta = (e, elem) => {
     let d = coord(e, elem);
+    console.log(d);
     delta.push([
       // parseInt(d[0]) - parseInt(d[2]),
       // parseInt(d[1]) - parseInt(d[3])
@@ -68,7 +69,7 @@ const dragSVG = (elem, elemGroup, stElem, enElem) => {
       d[0] - elem.x2.animVal.value,
       d[1] - elem.y2.animVal.value
     ]);
-    console.log(delta);
+    // console.log(delta);
   };
 
   elem.onmousedown = e => {
