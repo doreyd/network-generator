@@ -8,36 +8,41 @@
   </head>
   <body>
     <svg id="svg">
-      <!-- <clipPath id="aa">
+      <clipPath id="bb">
         <circle cx="70" cy="70" r="50"></circle>
-      </clipPath> -->
+      </clipPath>
+      <image
+        xlink:href="john.jpg"
+        clip-path="url(#bb)"
+        onclick="console.log('aa')"
+      />
     </svg>
-    <script src="svgImg.js"></script>
-    <script src="mark.js"></script>
+    <!-- <script src="svgImg.js"></script>
+    <script src="mark.js"></script> -->
     <script>
-      let svg = document.getElementById("svg");
+      // let svg = document.getElementById("svg");
 
-      let clipPath = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "clipPath"
-      );
-      clipPath.setAttribute("id", "aa");
+      // let clipPath = document.createElementNS(
+      //   "http://www.w3.org/2000/svg",
+      //   "clipPath"
+      // );
+      // clipPath.setAttribute("id", "aa");
 
-      let circle = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "circle"
-      );
-      circle.setAttribute("cx", "170");
-      circle.setAttribute("cy", "170");
-      circle.setAttribute("r", "500");
+      // let circle = document.createElementNS(
+      //   "http://www.w3.org/2000/svg",
+      //   "circle"
+      // );
+      // circle.setAttribute("cx", "170");
+      // circle.setAttribute("cy", "170");
+      // circle.setAttribute("r", "500");
 
-      clipPath.append(circle);
-      svg.append(clipPath);
-      svg.innerHTML += svgImg("aa");
-      // svg.innerHTML += svgImage;
-      let img = document.getElementById("ww");
-      img.setAttribute("x", "120");
-      img.setAttribute("y", "120");
+      // clipPath.append(circle);
+      // svg.append(clipPath);
+      // svg.innerHTML += svgImg("aa");
+      // // svg.innerHTML += svgImage;
+      // let img = document.getElementById("ww");
+      // img.setAttribute("x", "120");
+      // img.setAttribute("y", "120");
     </script>
   </body>
 </html>

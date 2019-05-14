@@ -60,7 +60,7 @@ const graphGen = (cx, cy, r, qty) => {
   for (let i = 0; i < qty; i++) {
     let alpha = (i * (Math.PI * 2)) / qty;
     let [sin, cos] = sinCos(alpha);
-    let [x, y] = netShape(cx, cy, r, sin, cos, i, "star");
+    let [x, y] = netShape(cx, cy, r, sin, cos, i, "circle");
     nodeRaw.push([x, y, r0]);
     links.push([qty, i]);
   }
