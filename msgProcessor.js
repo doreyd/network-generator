@@ -55,7 +55,8 @@ let msgData = {
   msgNew: keyList.map(x => stateCount(messages[x], "sender", false)),
   msgUnread: keyList.map(x => stateCount(messages[x], "receiver", false))
 };
-console.log(JSON.stringify(msgData));
+
+// console.log(JSON.stringify(msgData));
 
 // console.log(stateCount(messages["kayla"], "receiver", false));
 
